@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TezUsta - Professional Xizmatlar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #eff6ff;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --success: #22c55e;
+        }
+
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { 
+            background: var(--bg); 
+            background-image: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 20%);
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            color: var(--text-dark);
+        }
+
+        .container { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 50px rgba(37, 99, 235, 0.1); 
+            width: 95%; 
+            max-width: 480px; 
+            text-align: center;
+            transition: 0.4s;
+        }
+
+        .hidden { display: none; }
+
+        h1 { font-weight: 700; font-size: 28px; margin-bottom: 10px; color: var(--primary); }
+        p { color: var(--text-light); margin-bottom: 30px; }
+
+        /* Tugmalar dizayni */
+        .btn-group { display: flex; flex-direction: column; gap: 15px; }
+        
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 15px 25px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        button:hover { 
+            background: var(--primary-hover); 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary { background: #f1f5f9; color: var(--text-dark); box-shadow: none; }
+        .btn-secondary:hover { background: #e2e8f0; color: var(--text-dark); }
+
+        /* Inputlar */
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 10px 0; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            outline: none; 
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+
+        /* Usta kartochkalari */
+        #usta-list { margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 5px; }
+
+        .usta-card { 
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .usta-card:hover { border-color: var(--primary); background: #fff; }
+
+        .usta-card h3 { margin: 0 0 5px 0; font-size: 18px; color: var(--primary); display: flex; align-items: center; justify-content: space-between; }
+        .usta-card p { margin: 2px 0; font-size: 14px; }
+        
+        .status-badge {
+            font-size: 11px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .rating { color: #f59e0b; font-size: 13px; margin-top: 5px; }
+
+        /* Scrollbar dizayni */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <div id="step-1">
+        <div style="font-size: 50px; margin-bottom: 10px;">🛠️</div>
+        <h1>TezUsta</h1>
+        <p>Ishonchli ustani bir zumda toping yoki o'z xizmatingizni taklif qiling</p>
+        <div class="btn-group">
+            <button onclick="showForm('mijoz')">Usta qidirish</button>
+            <button class="btn-secondary" onclick="showForm('ishchi')">Usta bo'lib ro'yxatdan o'tish</button>
+        </div>
+    </div>
+
+    <div id="form-ishchi" class="hidden">
+        <h2>Profil yaratish</h2>
+        <p>Ma'lumotlaringizni kiriting</p>
+        <input type="text" id="worker-name" placeholder="To'liq ismingiz">
+        <input type="tel" id="worker-phone" placeholder="Telefon (+998...)">
+        <input type="text" id="worker-skill" placeholder="Sohangiz (masalan: Santexnik)">
+        <button style="width: 100%;" onclick="saveWorker()">Tasdiqlash</button>
+        <button class="btn-secondary" style="width: 100%; margin-top: 10px;" onclick="goBack()">Orqaga</button>
+    </div>
+
+    <div id="view-mijoz" class="hidden">
+        <h2>Eng yaxshi ustalar</h2>
+        <input type="text" id="search-input" onkeyup="searchUsta()" placeholder="🔍 Qanday usta kerak?">
+        <div id="usta-list"></div>
+        <button class="btn-secondary" style="width: 100%; margin-top: 20px;" onclick="goBack()">Asosiy sahifaga</button>
+    </div>
+</div>
+
+<script>
+    let workers = [
+        { name: "Ali Valiyev", phone: "+998901234567", skill: "Santexnik", rating: 4.9 },
+        { name: "Vali G'aniyev", phone: "+998933334455", skill: "Elektrik", rating: 4.8 },
+        { name: "Olim Hakimov", phone: "+998947778899", skill: "Suvoqchi", rating: 4.7 },
+        { name: "Shaxruz", phone: "+998955307242", skill: "Kafel terish", rating: 5.0 }
+    ];
+
+    function showForm(type) {
+        document.getElementById('step-1').classList.add('hidden');
+        if (type === 'ishchi') {
+            document.getElementById('form-ishchi').classList.remove('hidden');
+        } else {
+            document.getElementById('view-mijoz').classList.remove('hidden');
+            renderWorkers(workers);
+        }
+    }
+
+    function goBack() {
+        document.getElementById('step-1').classList.remove('hidden');
+        document.getElementById('form-ishchi').classList.add('hidden');
+        document.getElementById('view-mijoz').classList.add('hidden');
+    }
+
+    function saveWorker() {
+        const name = document.getElementById('worker-name').value;
+        const phone = document.getElementById('worker-phone').value;
+        const skill = document.getElementById('worker-skill').value;
+
+        if(name && phone && skill) {
+            workers.push({ name, phone, skill, rating: 5.0 });
+            alert("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+            goBack();
+        } else {
+            alert("Iltimos, ma'lumotlarni to'liq kiriting!");
+        }
+    }
+
+    function renderWorkers(data) {
+        const list = document.getElementById('usta-list');
+        list.innerHTML = "";
+        data.forEach(w => {
+            list.innerHTML += `
+                <div class="usta-card">
+                    <h3>${w.skill} <span class="status-badge">Online</span></h3>
+                    <p><strong>Usta:</strong> ${w.name}</p>
+                    <p><strong>Aloqa:</strong> ${w.phone}</p>
+                    <div class="rating">⭐ ${w.rating} • 24 ta sharh</div>
+                </div>
+            `;
+        });
+    }
+
+    function searchUsta() {
+        const term = document.getElementById('search-input').value.toLowerCase();
+        const filtered = workers.filter(w => w.skill.toLowerCase().includes(term));
+        renderWorkers(filtered);
+    }
+</script>
+
+</body>
+</html>
